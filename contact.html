@@ -1,200 +1,217 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us | CarePoint Clinic</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | CarePoint Clinic</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header class="header">
+<header class="header">
     <div class="container navbar">
-      <a href="index.html" class="logo">CarePoint Clinic</a>
+        <a href="index.html" class="logo">CarePoint Clinic</a>
 
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="services.html">Services</a>
-        <a href="doctor.html">Doctors</a>
-        <a href="contact.html" class="nav-button">Contact</a>
-      </nav>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="services.html">Services</a>
+            <a href="doctor.html">Doctors</a>
+            <a href="contact.html" class="nav-button">Contact</a>
+        </nav>
     </div>
-  </header>
+</header>
 
-  <main>
+<main>
     <section class="contact-hero">
-      <div class="container">
-        <span class="contact-tag">WE'RE HERE TO HELP</span>
-        <h1>Let's talk about your health.</h1>
-        <p>Have a question or need an appointment? Send us a message and our team will get back to you.</p>
-      </div>
+        <div class="container">
+            <span class="contact-tag">WE'RE HERE TO HELP</span>
+            <h1>Let's talk about your health.</h1>
+            <p>Have a question or need an appointment? Send us a message and our team will get back to you.</p>
+        </div>
     </section>
 
     <section class="contact-main">
-      <div class="container contact-layout">
+        <div class="container contact-layout">
 
-        <div class="contact-info">
-          <span class="contact-tag">GET IN TOUCH</span>
-          <h2>How can we help you?</h2>
-          <p class="contact-description">
-            Whether you have a question about our services or want to enquire
-            about an appointment, we're happy to hear from you.
-          </p>
+            <div class="contact-info">
+                <span class="contact-tag">GET IN TOUCH</span>
+                <h2>How can we help you?</h2>
 
-          <div class="contact-info-card">
-            <div class="contact-icon">01</div>
-            <div>
-              <h3>Appointments</h3>
-              <p>Send an appointment enquiry using the form. Include your preferred date in your message.</p>
+                <p class="contact-description">
+                    Whether you have a question about our services or want to enquire
+                    about an appointment, we're happy to hear from you.
+                </p>
+
+                <div class="contact-info-card">
+                    <div class="contact-icon">01</div>
+                    <div>
+                        <h3>Appointments</h3>
+                        <p>Send an appointment enquiry using the form. Include your preferred date in your message.</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-card">
+                    <div class="contact-icon">02</div>
+                    <div>
+                        <h3>General enquiries</h3>
+                        <p>Ask us about clinic services, consultations or other general information.</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-card">
+                    <div class="contact-icon">03</div>
+                    <div>
+                        <h3>We're listening</h3>
+                        <p>Give us enough detail in your message so our team can assist you.</p>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div class="contact-info-card">
-            <div class="contact-icon">02</div>
-            <div>
-              <h3>General enquiries</h3>
-              <p>Ask us about clinic services, consultations or other general information.</p>
-            </div>
-          </div>
+            <div class="contact-form-card">
+                <h2>Send us a message</h2>
+                <p>Fill in the details below.</p>
 
-          <div class="contact-info-card">
-            <div class="contact-icon">03</div>
-            <div>
-              <h3>We're listening</h3>
-              <p>Give us enough detail in your message so our team can assist you.</p>
+                <form id="contactForm">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full name</label>
+                            <input type="text" id="name" name="name"
+                                placeholder="Your name"
+                                autocomplete="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone number</label>
+                            <input type="tel" id="phone" name="phone"
+                                placeholder="Your phone number"
+                                autocomplete="tel">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" id="email" name="email"
+                            placeholder="you@example.com"
+                            autocomplete="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Enquiry type</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select an option</option>
+                            <option value="Appointment">Appointment</option>
+                            <option value="General enquiry">General enquiry</option>
+                            <option value="Services">Services</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your message</label>
+                        <textarea id="message" name="message"
+                            rows="5"
+                            placeholder="How can we help you?"
+                            required></textarea>
+                    </div>
+
+                    <button type="submit" id="submitButton">
+                        Send Message
+                    </button>
+
+                    <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+
+                </form>
             </div>
-          </div>
+
         </div>
-
-        <div class="contact-form-card">
-          <h2>Send us a message</h2>
-          <p>Fill in the details below.</p>
-
-          <form id="contactForm">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="name">Full name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Your name"
-                  autocomplete="name"
-                  required
-                >
-              </div>
-
-              <div class="form-group">
-                <label for="phone">Phone number</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  placeholder="Your phone number"
-                  autocomplete="tel"
-                >
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="email">Email address</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="you@example.com"
-                autocomplete="email"
-                required
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="subject">Enquiry type</label>
-              <select id="subject" name="subject" required>
-                <option value="">Select an option</option>
-                <option value="Appointment">Appointment</option>
-                <option value="General enquiry">General enquiry</option>
-                <option value="Services">Services</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="message">Your message</label>
-              <textarea
-                id="message"
-                name="message"
-                rows="5"
-                placeholder="How can we help you?"
-                required
-              ></textarea>
-            </div>
-
-            <button type="submit" id="submitButton">
-              Send Message
-            </button>
-
-            <p id="formStatus" class="form-status" role="status"></p>
-          </form>
-        </div>
-
-      </div>
     </section>
-  </main>
+</main>
 
-  <footer class="footer">
+<footer class="footer">
     <div class="container">
-      <p>© 2026 CarePoint Clinic. All rights reserved.</p>
+        <p>© 2026 CarePoint Clinic. All rights reserved.</p>
     </div>
-  </footer>
+</footer>
 
-  <script>
-    const contactForm = document.getElementById("contactForm");
-    const submitButton = document.getElementById("submitButton");
-    const formStatus = document.getElementById("formStatus");
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    contactForm.addEventListener("submit", async function(event) {
-      event.preventDefault();
+<script>
+const SUPABASE_URL = "https://ivhmelpycrzanhgyflrx.supabase.co";
 
-      submitButton.disabled = true;
-      submitButton.textContent = "Sending...";
-      formStatus.textContent = "";
+const SUPABASE_KEY = "sb_publishable_awgv-rUhZhUn2ZTQLS2kqg_eftPJ6WK";
 
-      const formData = Object.fromEntries(
-        new FormData(contactForm).entries()
-      );
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
-      try {
-        const response = await fetch("http://localhost:3000/api/contact", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(formData)
-        });
+const contactForm = document.getElementById("contactForm");
+const submitButton = document.getElementById("submitButton");
+const formStatus = document.getElementById("formStatus");
 
-        const result = await response.json();
+contactForm.addEventListener("submit", async function(event) {
 
-        if (!response.ok) {
-          throw new Error(result.message || "Something went wrong.");
+    event.preventDefault();
+
+    if (!contactForm.checkValidity()) {
+        contactForm.reportValidity();
+        return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Sending...";
+    formStatus.textContent = "";
+    formStatus.className = "form-status";
+
+    const formData = new FormData(contactForm);
+
+    const enquiry = {
+        full_name: formData.get("name").trim(),
+        email: formData.get("email").trim(),
+        phone: formData.get("phone").trim(),
+        subject: formData.get("subject"),
+        message: formData.get("message").trim()
+    };
+
+    try {
+
+        const { error } = await supabaseClient
+            .from("enquiries")
+            .insert([enquiry]);
+
+        if (error) {
+            console.error("Supabase error:", error);
+            throw error;
         }
 
-        formStatus.textContent = "Your message has been sent successfully!";
+        formStatus.textContent =
+            "Your message has been sent successfully! We'll get back to you soon.";
+
         formStatus.className = "form-status success";
+
         contactForm.reset();
 
-      } catch (error) {
-        formStatus.textContent = error.message;
+    } catch (error) {
+
+        console.error("Contact form error:", error);
+
+        formStatus.textContent =
+            "Sorry, we couldn't send your message. Please try again later.";
+
         formStatus.className = "form-status error";
 
-      } finally {
+    } finally {
+
         submitButton.disabled = false;
         submitButton.textContent = "Send Message";
-      }
-    });
-  </script>
+
+    }
+
+});
+</script>
 
 </body>
 </html>
