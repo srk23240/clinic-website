@@ -1,0 +1,494 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquiry Dashboard | CarePoint Clinic</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #e5e9ec;
+}
+
+.stat-card p {
+    color: #667085;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.stat-card h2 {
+    color: #167d91;
+    font-size: 30px;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+
+        .dashboard {
+            padding: 50px 0;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-tools {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-tools input,
+        .dashboard-tools select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .enquiry-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        .enquiry-table th,
+        .enquiry-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .enquiry-table th {
+            background: #f5f8fa;
+        }
+
+        .status-select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .delete-button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .logout-button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #167d91;
+            color: white;
+            cursor: pointer;
+        }
+
+        .message-cell {
+            max-width: 250px;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .dashboard-tools {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="dashboard">
+        <div class="container">
+
+            <div class="dashboard-header">
+                <div>
+                    <h1>Enquiry Dashboard</h1>
+                    <p>Manage CarePoint Clinic enquiries.</p>
+                </div>
+
+                <button class="logout-button" id="logoutButton">
+                    Logout
+                </button>
+            </div>
+
+
+            <div class="dashboard-stats">
+
+    <div class="stat-card">
+        <p>Total Enquiries</p>
+        <h2 id="totalCount">0</h2>
+    </div>
+
+    <div class="stat-card">
+        <p>New Enquiries</p>
+        <h2 id="newCount">0</h2>
+    </div>
+
+    <div class="stat-card">
+        <p>Contacted</p>
+        <h2 id="contactedCount">0</h2>
+    </div>
+
+    <div class="stat-card">
+        <p>Resolved</p>
+        <h2 id="resolvedCount">0</h2>
+    </div>
+
+</div>
+
+
+            <div class="dashboard-tools">
+
+    <input
+        type="search"
+        id="searchInput"
+        placeholder="Search name, email or phone..."
+    >
+
+    <select id="statusFilter">
+        <option value="all">All enquiries</option>
+        <option value="new">New</option>
+        <option value="contacted">Contacted</option>
+        <option value="resolved">Resolved</option>
+    </select>
+
+    <select id="dateFilter">
+        <option value="all">All time</option>
+        <option value="today">Today</option>
+        <option value="7">Last 7 days</option>
+        <option value="30">Last 30 days</option>
+    </select>
+
+</div>
+
+            <p id="dashboardStatus">Loading enquiries...</p>
+
+            <div class="table-wrapper">
+                <table class="enquiry-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Type</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="enquiryTableBody"></tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        const SUPABASE_URL = "https://ivhmelpycrzanhgyflrx.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_awgv-rUhZhUn2ZTQLS2kqg_eftPJ6WK";
+
+        const supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+        const tableBody = document.getElementById("enquiryTableBody");
+        const dashboardStatus = document.getElementById("dashboardStatus");
+        const searchInput = document.getElementById("searchInput");
+        const statusFilter = document.getElementById("statusFilter");
+        const dateFilter = document.getElementById("dateFilter");
+
+        let enquiries = [];
+
+
+
+        async function checkLogin() {
+    const { data, error } = await supabaseClient.auth.getUser();
+
+    const ADMIN_UID = "28238249-c00f-4b7c-9be4-f2d5ec06e334";
+
+    if (error || !data.user || data.user.id !== ADMIN_UID) {
+        await supabaseClient.auth.signOut();
+        window.location.href = "admin.html";
+        return false;
+    }
+
+    return true;
+}
+
+        async function loadEnquiries() {
+            const { data, error } = await supabaseClient
+                .from("enquiries")
+                .select("*")
+                .order("created_at", { ascending: false });
+
+            if (error) {
+                dashboardStatus.textContent = error.message;
+                return;
+            }
+
+            enquiries = data;
+
+updateStatistics();
+
+dashboardStatus.textContent =
+    `${data.length} enquiries found`;
+
+renderEnquiries();
+
+
+
+        }
+
+        function updateStatistics() {
+    document.getElementById("totalCount").textContent =
+        enquiries.length;
+
+    document.getElementById("newCount").textContent =
+        enquiries.filter(item => item.status === "new").length;
+
+    document.getElementById("contactedCount").textContent =
+        enquiries.filter(item => item.status === "contacted").length;
+
+    document.getElementById("resolvedCount").textContent =
+        enquiries.filter(item => item.status === "resolved").length;
+}
+
+
+
+        
+        function renderEnquiries() {
+
+    const search = searchInput.value.toLowerCase();
+    const status = statusFilter.value;
+    const selectedDate = dateFilter.value;
+
+    const now = new Date();
+
+    const filtered = enquiries.filter(item => {
+
+        // Search filter
+        const matchesSearch = [
+            item.full_name,
+            item.email,
+            item.phone
+        ].some(value =>
+            String(value || "").toLowerCase().includes(search)
+        );
+
+        // Status filter
+        const matchesStatus =
+            status === "all" || item.status === status;
+
+        // Date filter
+        const created = new Date(item.created_at);
+
+        let matchesDate = true;
+
+        if (selectedDate === "today") {
+
+            matchesDate =
+                created.getDate() === now.getDate() &&
+                created.getMonth() === now.getMonth() &&
+                created.getFullYear() === now.getFullYear();
+
+        } else if (selectedDate !== "all") {
+
+            const days = Number(selectedDate);
+
+            const cutoff = new Date(
+                now.getTime() - days * 24 * 60 * 60 * 1000
+            );
+
+            matchesDate = created >= cutoff && created <= now;
+        }
+
+        return matchesSearch && matchesStatus && matchesDate;
+    });
+
+    tableBody.innerHTML = "";
+
+    filtered.forEach(item => {
+
+        const row = document.createElement("tr");
+
+        const values = [
+            item.id,
+            item.full_name,
+            item.phone,
+            item.email,
+            item.subject,
+            item.message,
+            new Date(item.created_at).toLocaleString()
+        ];
+
+        values.forEach(value => {
+
+            const cell = document.createElement("td");
+
+            cell.textContent = value ?? "";
+
+            if (value === item.message) {
+                cell.className = "message-cell";
+            }
+
+            row.appendChild(cell);
+        });
+
+        // Status dropdown
+        const statusCell = document.createElement("td");
+        const select = document.createElement("select");
+
+        select.className = "status-select";
+
+        ["new", "contacted", "resolved"].forEach(option => {
+
+            const optionElement = document.createElement("option");
+
+            optionElement.value = option;
+            optionElement.textContent = option;
+
+            select.appendChild(optionElement);
+        });
+
+        select.value = item.status || "new";
+
+        select.addEventListener("change", async () => {
+
+            const { error } = await supabaseClient
+                .from("enquiries")
+                .update({ status: select.value })
+                .eq("id", item.id);
+
+            if (error) {
+
+                alert(error.message);
+                select.value = item.status || "new";
+
+            } else {
+
+                item.status = select.value;
+
+                updateStatistics();
+
+                dashboardStatus.textContent = "Status updated.";
+            }
+        });
+
+        statusCell.appendChild(select);
+        row.appendChild(statusCell);
+
+        // Delete button
+        const actionCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "delete-button";
+
+        deleteButton.addEventListener("click", async () => {
+
+            if (!confirm("Delete this enquiry permanently?")) {
+                return;
+            }
+
+            const { error } = await supabaseClient
+                .from("enquiries")
+                .delete()
+                .eq("id", item.id);
+
+            if (error) {
+
+                alert(error.message);
+
+            } else {
+
+                enquiries = enquiries.filter(
+                    enquiry => enquiry.id !== item.id
+                );
+
+                updateStatistics();
+                renderEnquiries();
+            }
+        });
+
+        actionCell.appendChild(deleteButton);
+        row.appendChild(actionCell);
+
+        tableBody.appendChild(row);
+    });
+
+    dashboardStatus.textContent =
+        `${filtered.length} enquiries found`;
+}
+
+dateFilter.addEventListener("change", renderEnquiries);
+
+
+
+        searchInput.addEventListener("input", renderEnquiries);
+        statusFilter.addEventListener("change", renderEnquiries);
+
+        document.getElementById("logoutButton").addEventListener("click", async () => {
+            await supabaseClient.auth.signOut();
+            window.location.href = "admin.html";
+        });
+
+        async function startDashboard() {
+            const loggedIn = await checkLogin();
+
+            if (loggedIn) {
+                await loadEnquiries();
+            }
+        }
+
+        startDashboard();
+    </script>
+
+</body>
+</html>
